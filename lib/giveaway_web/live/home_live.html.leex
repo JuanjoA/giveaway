@@ -1,11 +1,21 @@
 <section class="phx-hero">
-  <h1><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h1>
-  <p>Peace of mind from prototype to production</p>
 
-  <p>Tu número: <%= @result %></p>
+  <div id='numbers'
+      x-data='{result: "<%= @result %>", searching: <%= @result == '' %>}'
+      x-init="() => {
+          $watch('result', value => console.log(value)
+          )}">
+
+    <p>Tu número (phoenix):  <span><%= @result %></span></p>
+    <p>Tu número (alpinejs): <span x-text="result"></span></p>
+
   <form phx-change="suggest" phx-submit="get_number">
-    <button type="submit" 
-            phx-disable-with="Searching...">Coje tú número</button>
+    <button type="submit"
+            phx-disable-with="Searching..."
+            x-on:click="result = getNumberRandom()">Coje tú número</button>
   </form>
-</section>
 
+  </div>
+
+
+</section>

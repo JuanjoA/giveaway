@@ -6,11 +6,10 @@ defmodule GiveawayWeb.HomeLive do
   end
 
   def handle_event("get_number", %{}, socket) do
-
-    {:noreply, socket
-    |> assign(result: Enum.random(101..1000))}
     Process.sleep(1000)
-    {:noreply, socket
-    |> assign(result: Enum.random(1..100))}
+
+    {:noreply,
+     socket
+     |> assign(result: Enum.random(100_001..999_999))}
   end
 end

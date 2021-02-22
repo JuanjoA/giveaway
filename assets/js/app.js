@@ -13,13 +13,28 @@ import "../css/app.scss"
 //     import socket from "./socket"
 //
 import "phoenix_html"
-import {Socket} from "phoenix"
+import { Socket } from "phoenix"
 import NProgress from "nprogress"
-import {LiveSocket} from "phoenix_live_view"
+import { LiveSocket } from "phoenix_live_view"
+
+import Alpine from 'alpinejs'
+
+let Hooks = {};
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
-
+let liveSocket = new LiveSocket('/live', Socket, {
+  dom: {
+    onBeforeElUpdated(from, to) {
+      if (from.__x) {
+        Alpine.clone(from.__x, to)
+      }
+    }
+  },
+  params: {
+    _csrf_token: csrfToken
+  },
+  hooks: Hooks
+})
 // Show progress bar on live navigation and form submits
 window.addEventListener("phx:page-loading-start", info => NProgress.start())
 window.addEventListener("phx:page-loading-stop", info => NProgress.done())
@@ -33,3 +48,21 @@ liveSocket.connect()
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
 
+let random_numbers = [
+  994517,
+  463780,
+  439966,
+  118769,
+  719542,
+  951243,
+  889047,
+  366582,
+  521397,
+  869364
+]
+
+window.getNumberRandom = () => {
+  const random = Math.floor(Math.random() * random_numbers.length);
+  console.log('> random_numbers[random]', random_numbers[random]);
+  return random_numbers[random];
+}
