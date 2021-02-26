@@ -21,6 +21,44 @@ import Alpine from 'alpinejs'
 
 let Hooks = {};
 
+
+
+Hooks.Numbers = {
+  getNumberRandom (){
+    let simulated_random_numbers = [
+      994517, 463780, 439966, 118769, 719542,
+      951243, 889047, 366582, 521397, 869364
+    ]
+    const random = Math.floor(Math.random() * simulated_random_numbers.length);
+    return simulated_random_numbers[random];
+  },
+  mounted() {
+    // this enables numbersHook to use in front html
+    window.numbersHook = this;
+  },
+  updated() {
+    // from backend, we get the result number
+    this.deactivate();
+  },
+  activate() {
+    let el = this.el;
+    let result = el.getAttribute('result')   ;
+    let i = 0;
+    this.random_numbers_interval = setInterval( function() {
+      var randomNumber = Hooks.Numbers.getNumberRandom();
+      let event = new CustomEvent('numbers-updated', {
+        detail: {
+          result: randomNumber
+        }
+      });
+      el.dispatchEvent(event);
+    }, 200)
+  },
+  deactivate() {
+    clearInterval(this.random_numbers_interval);
+  }
+}
+
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket('/live', Socket, {
   dom: {
@@ -47,22 +85,3 @@ liveSocket.connect()
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
-
-let random_numbers = [
-  994517,
-  463780,
-  439966,
-  118769,
-  719542,
-  951243,
-  889047,
-  366582,
-  521397,
-  869364
-]
-
-window.getNumberRandom = () => {
-  const random = Math.floor(Math.random() * random_numbers.length);
-  console.log('> random_numbers[random]', random_numbers[random]);
-  return random_numbers[random];
-}

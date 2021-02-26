@@ -6,7 +6,7 @@ defmodule GiveawayWeb.HomeLive do
   end
 
   def handle_event("get_number", %{}, socket) do
-    Process.sleep(1000)
+    Process.sleep(2000)
 
     {:noreply,
      socket

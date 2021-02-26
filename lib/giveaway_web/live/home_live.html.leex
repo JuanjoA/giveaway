@@ -1,18 +1,21 @@
 <section class="phx-hero">
 
+<%# x-init="() => {$watch('result', value => console.log('div x-init value: ', value))}" %>
   <div id='numbers'
       x-data='{result: "<%= @result %>", searching: <%= @result == '' %>}'
-      x-init="() => {
-          $watch('result', value => console.log(value)
-          )}">
+      phx-hook='Numbers'
+      x-on:numbers-updated="result = $event.detail.result"
+      result="<%= @result %>"
+      >
 
-    <p>Tu número (phoenix):  <span><%= @result %></span></p>
-    <p>Tu número (alpinejs): <span x-text="result"></span></p>
+    <p>Your number (phoenix):  <span><%= @result %></span></p>
+    <p>Your number (alpinejs): <span x-text="result"></span></p>
 
   <form phx-change="suggest" phx-submit="get_number">
     <button type="submit"
             phx-disable-with="Searching..."
-            x-on:click="result = getNumberRandom()">Coje tú número</button>
+            x-on:click='numbersHook.activate()'
+            >Get Your Number</button>
   </form>
 
   </div>
