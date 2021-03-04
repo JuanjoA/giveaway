@@ -10,7 +10,7 @@ Try to emulate the give away of elixirforum.com (basic, very basic)
 
  * Config your database settings in *config/dev.exs*
  * Create schema with:  *mix ecto.create*
- * No migrations needed.
+ * Migrate:  *mix ecto.migrate*
 
 ### Assets / JS
 
